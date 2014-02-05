@@ -8,6 +8,23 @@ from re import sub
 from tweepy import OAuthHandler, API
 from sys import exit
 
+def get_api_client():
+    config = ConfigParser()
+    ini = path.join(path.abspath(path.dirname(__file__)), 'config.ini')
+
+    config.read(ini)
+
+    consumer_key = config.get('Consumer', 'key')
+    consumer_secret = config.get('Consumer', 'secret')
+
+    access_key = config.get('Access', 'key')
+    access_secret = config.get('Access', 'secret')
+
+    auth = OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_key, access_secret)
+
+    return API(auth)
+
 def get_fortune(retry_count=0):
     cmd = Popen(['fortune'], stdout=PIPE, stderr=PIPE)
     out, err = cmd.communicate()
@@ -31,23 +48,6 @@ def retry_fortune(retry_count=0):
         exit(1)
 
     return get_fortune(retry_count)
-
-def get_api_client():
-    config = ConfigParser()
-    ini = path.join(path.abspath(path.dirname(__file__)), 'config.ini')
-
-    config.read(ini)
-
-    consumer_key = config.get('Consumer', 'key')
-    consumer_secret = config.get('Consumer', 'secret')
-
-    access_key = config.get('Access', 'key')
-    access_secret = config.get('Access', 'secret')
-
-    auth = OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_key, access_secret)
-
-    return API(auth)
 
 def tweet_fortune():
     api_client = get_api_client()
