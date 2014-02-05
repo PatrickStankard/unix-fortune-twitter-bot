@@ -1,0 +1,1 @@
+0,30 * * * * /usr/bin/python /path/to/unit-fortune-twitter-bot/tweet.py
